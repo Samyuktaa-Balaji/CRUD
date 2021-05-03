@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CRUD OPERATIONS</title>
+	<link rel="stylesheet" type="text/css" href="table.css">
+</head>
+<body onload="display()">
+	<p class="head">My Item List</p>
+	<div class="add_item">
+		<form name="add_form" method="post" onsubmit="return add()">
+			<b>Product Name : </b><br>
+			<input type="text" name="pname" id="prod_name"><br><br>
+			<b>Quantity : </b><br>
+			<input type="text" name="quan"><br><br>
+			<b>Price : </b><br>
+			<input type="text" name="price"><br><br>
+			<input type="submit" class="add save" id="save_button" value="Add Product">
+			<input type="submit" class="add update" id="update_button" value="Update">
+			<input type="button" class="add clear" id="clear_button" value="Clear">
+		</form>
+	</div><br>
+		<table class="item_table" id="box">
+		    <!-- <tr>
+			    <th>PRODUCT NAME</th>
+			    <th>QUANTITY</th> 
+			    <th>PRICE</th>
+			    <th>ACTION</th>
+			</tr>
+			<tr>
+				<td>Apple</td>
+			    <td>4</td>
+			    <td>20</td>
+			    <td><button class="button edit">Edit</button>&nbsp;&nbsp;&nbsp;<button class="button delete">Delete</button></td>
+			</tr>
+			<tr>
+			    <td>Kurthi</td>
+			    <td>2</td>
+			    <td>250</td>
+			    <td><button class="button edit">Edit</button>&nbsp;&nbsp;&nbsp;<button class="button delete">Delete</button></td>
+			</tr> -->
+		</table>
+</body>
+<script type="text/javascript">
+	var rows = [{
+		    name: "Apple",
+		    quan: 20,
+		    price: 200
+		}, {
+		    name: "Watch",
+		    quan: 1,
+		    price: 1000
+		}];
+
+	function display() {
+		var html = "<tr>";
+		html+="<th>PRODUCT NAME</th>";
+		html+="<th>QUANTITY</th>";
+		html+="<th>PRICE</th>";
+		html+="<th>ACTION</th>";
+		html+="</tr>";
+		for (var i = 0; i < rows.length; i++) {
+		    html+="<tr>";
+		    html+="<td>"+rows[i].name+"</td>";
+		    html+="<td>"+rows[i].quan+"</td>";
+		    html+="<td>"+rows[i].price+"</td>";
+		    html+="<td><button class='button edit' id='"+i+"' onclick='edit("+i+")'>Edit</button>&nbsp;&nbsp;&nbsp;<button class='button delete' id='"+i+"' onclick='deleteData("+i+")'>Delete</button></td>";
+		    html+="</tr>";
+		}
+		document.getElementById("box").innerHTML = html;
+	}
+		
+	function add() {
+		document.getElementById("save_button").disabled=false;
+		document.getElementById("update_button").disabled=true;
+		var n = document.add_form.pname.value;
+		var q = document.add_form.quan.value;
+		var p = document.add_form.price.value;
+		var temp = {
+			name: n,
+			quan: q,
+			price: p
+		};
+		var f=1;
+		for (var i = 0; i < rows.length; i++) {
+			if(rows[i].name==n){
+				f=0;
+				break;
+			}
+		}
+		if(f==1){
+			rows.push(temp);
+		}
+		display();
+		document.getElementById("clear_button").onclick = function clear() {
+			document.add_form.pname.value = "";
+			document.add_form.quan.value = "";
+			document.add_form.price.value = "";
+			document.getElementById("prod_name").disabled = false;
+			document.getElementById("save_button").disabled=false;
+			document.getElementById("update_button").disabled=false;
+			return false;
+		}
+		return false;
+	}
+
+	function edit(input) {
+		document.add_form.pname.value = rows[input].name;
+		document.add_form.quan.value = rows[input].quan;
+		document.add_form.price.value = rows[input].price;
+		document.getElementById("prod_name").disabled = true;
+		document.getElementById("save_button").disabled=true;
+		document.getElementById("update_button").disabled=false;
+		document.getElementById("update_button").onclick = function edit_data() {
+			rows[input].name = document.add_form.pname.value;
+			rows[input].quan = document.add_form.quan.value;
+			rows[input].price = document.add_form.price.value;
+		}
+		display();
+		document.getElementById("clear_button").onclick = function clear() {
+			document.add_form.pname.value = "";
+			document.add_form.quan.value = "";
+			document.add_form.price.value = "";
+			document.getElementById("prod_name").disabled = false;
+			document.getElementById("save_button").disabled=false;
+			document.getElementById("update_button").disabled=false;
+			return false;
+		}
+		return false;
+	}
+
+	function deleteData(input) {
+		rows.splice(input, 1);
+		display();
+		return false;
+	}
+
+</script>
+</html>
